@@ -8,6 +8,8 @@ scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   cache,
+  "com.beachape" %% "enumeratum" % "1.5.3",
+  "com.beachape" %% "enumeratum-play-json" % "1.5.3",
   specs2 % Test
 )
 
