@@ -116,6 +116,8 @@ ws.on :message do |msg|
     game(ws, msg)
   when "result"
     pp msg
+  when "timeout"
+    puts "#{msg["color"]} is timeout."
   end
 end
 
