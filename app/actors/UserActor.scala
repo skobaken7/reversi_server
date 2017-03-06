@@ -37,6 +37,10 @@ class UserActor(name: String, out: ActorRef, room: ActorRef) extends Actor {
       output("result", result)
       self ! PoisonPill
     }
+    case timeout: Timeout => {
+      output("timeout", timeout)
+      self ! PoisonPill
+    }
 
     case js: JsObject => {
       val action = (js \ "action").validate[String].asOpt.getOrElse("no action")

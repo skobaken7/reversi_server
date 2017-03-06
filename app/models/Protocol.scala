@@ -11,6 +11,7 @@ case class PutPoint(x: Int, y: Int, color: Color)
 case class PutResult(put: PutPoint, board: Board)
 case class Result(black: Int, white: Int)
 case class Error(exception: String)
+case class Timeout(now: Long, color: Color)
 case object LookBoard
 
 object Implicits {
@@ -35,4 +36,5 @@ object Implicits {
   implicit val putColorFormat = Json.format[PutPoint]
   implicit val putResultWrites = Json.writes[PutResult]
   implicit val resultWrites = Json.writes[Result]
+  implicit val timeoutWrites = Json.writes[Timeout]
 }
