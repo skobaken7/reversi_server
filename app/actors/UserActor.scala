@@ -4,7 +4,6 @@ import models._
 import models.Implicits._
 
 import akka.actor.{Actor, ActorRef, Props, PoisonPill}
-import akka.util._
 import akka.pattern.ask
 
 import play.api.Logger
@@ -16,7 +15,7 @@ import scala.concurrent.duration._
 
 class UserActor(name: String, out: ActorRef, room: ActorRef) extends Actor {
   var state = Option.empty[State]
-  implicit val timeout = Timeout(1.minutes)
+  implicit val timeout = akka.util.Timeout(1.minutes)
 
   override def preStart = {
     room ! Join(name)

@@ -1,6 +1,9 @@
 package models
 
-case class Board(cells: Array[Array[Option[Color]]], nextTurn: Option[Color]) {
+import scala.collection.IndexedSeq
+import scala.collection.immutable.Vector
+
+case class Board(cells: IndexedSeq[IndexedSeq[Option[Color]]], nextTurn: Option[Color]) {
   type Point = (Int, Int)
 
   private def arrounds = for(i <- -1 to 1; j <- -1 to 1 if (!(i == 0 && j == 0))) yield (i, j)
@@ -46,10 +49,15 @@ case class Board(cells: Array[Array[Option[Color]]], nextTurn: Option[Color]) {
     val reversed = arrounds flatMap getOppositeCellsUntilSameColor(p, color)
     if (reversed.size == 0) throw InvalidPutException
 
-    val newCells = cells.map(_.clone)
-    newCells(p._1)(p._2) = Option(color)
-    for ((x, y) <- reversed) {
-      newCells(x)(y) = Option(color)
+    val newCells = cells.zipWithIndex.map{ case(row, i) =>
+      row.zipWithIndex.map { case(orig, j) =>
+        (i, j) match {
+          case c if(reversed.contains(c) || c == p) => Option(color)
+          case _ => {
+            orig
+          }
+        }
+      }
     }
 
     val nextBoard = Board(newCells, None)
@@ -76,16 +84,15 @@ object Board {
   val WIDTH = 8
 
   def apply() = {
-    val cells = Array.fill(WIDTH) {
-      Array.fill(WIDTH) {
-        Option.empty[Color]
+    val cells = Vector.tabulate(WIDTH) { i =>
+      Vector.tabulate(WIDTH) { j =>
+        (i,j) match {
+          case (3,3) | (4,4) => Option(Color.White)
+          case (3,4) | (4,3) => Option(Color.Black)
+          case _             => Option.empty[Color]
+        }
       }
     }
-
-    cells(3)(3) = Option(Color.White)
-    cells(4)(4) = Option(Color.White)
-    cells(3)(4) = Option(Color.Black)
-    cells(4)(3) = Option(Color.Black)
 
     new Board(cells, Option(Color.Black))
   }

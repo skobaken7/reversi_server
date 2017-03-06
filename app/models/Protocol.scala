@@ -16,8 +16,8 @@ case object LookBoard
 object Implicits {
   import Color._
 
-  implicit val cellsWrites = new Writes[Array[Array[Option[Color]]]] {
-    def writes(cells: Array[Array[Option[Color]]]) = {
+  implicit val cellsWrites = new Writes[IndexedSeq[IndexedSeq[Option[Color]]]] {
+    def writes(cells: IndexedSeq[IndexedSeq[Option[Color]]]) = {
       JsArray(cells.map{ row => 
         JsArray(row.map{
           case Some(Black) => JsString("b")
